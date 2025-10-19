@@ -56,6 +56,39 @@ data class Estacion(
             "est_25" -> listOf(R.drawable.estacion_santa_rosa_1, R.drawable.estacion_santa_rosa_2) // ✅ SANTA ROSA
             "est_26" -> listOf(R.drawable.estacion_bayovar_1, R.drawable.estacion_bayovar_2) // ✅ BAYÓVAR
 
+
+
+            "est_l2_01" -> listOf(R.drawable.puerto_del_callao1, R.drawable.puerto_del_callao2)
+            "est_l2_02" -> listOf(R.drawable.estacion_buenos_aires1, R.drawable.estacion_buenos_aires2)
+            "est_l2_03" -> listOf(R.drawable.estacion_juan_pablo1, R.drawable.estacion_juan_pablo2)
+            "est_l2_04" -> listOf(R.drawable.estacion_insurgentes, R.drawable.estacion_insurgentes2)
+            "est_l2_05" -> listOf(R.drawable.estacion_carmen_de_la_legua1, R.drawable.estacion_carmen_de_la_legua2)
+            "est_l2_06" -> listOf(R.drawable.estacion_oscar_benavides1, R.drawable.estacion_oscar_benavides2)
+            "est_l2_07" -> listOf(R.drawable.estacion_san_marcos1, R.drawable.estacion_san_marcos2)
+            "est_l2_08" -> listOf(R.drawable.estacion_elio1, R.drawable.estacion_elio2)
+            "est_l2_09" -> listOf(R.drawable.estacion_alborada, R.drawable.estacion_alborada2)
+            "est_l2_10" -> listOf(R.drawable.estacion_tingo_maria1, R.drawable.estacion_tingo_maria2)
+            "est_l2_11" -> listOf(R.drawable.estacion_de_parque_murrillo1, R.drawable.estacion_de_parque_murrillo2)
+            "est_l2_12" -> listOf(R.drawable.estacion_plaza_bologneci, R.drawable.estacion_plaza_bologneci2)
+            "est_l2_13" -> listOf(R.drawable.estacion_central1, R.drawable.estacion_central2)
+            "est_l2_14" -> listOf(R.drawable.estacion_manco_capac1, R.drawable.estacion_manco_capac2)
+            "est_l2_15" -> listOf(R.drawable.estacion_cangallo, R.drawable.estacion_cangallo) // ⚠️ Solo diste un nombre, se repite
+            "est_l2_16" -> listOf(R.drawable.estacion_villa_el_salvador_1, R.drawable.estacion_villa_el_salvador_2) // ⚠️ "28 de Julio" - Sin imagen, usa default
+            "est_l2_17" -> listOf(R.drawable.estacion_nicolas_ayllon1, R.drawable.estacion_nicolas_ayllon2)
+            "est_l2_18" -> listOf(R.drawable.estacion_circuvalicacion1, R.drawable.estacion_circuvalicacion2)
+            "est_l2_19" -> listOf(R.drawable.estacion_san_juan_de_dios1, R.drawable.estacion_san_juan_de_dios2)
+            "est_l2_20" -> listOf(R.drawable.estacion_evitamiento1, R.drawable.estacion_evitamiento2)
+            "est_l2_21" -> listOf(R.drawable.estacion_ovalo_santa_anita1, R.drawable.estacion_ovalo_santa_anita2)
+            "est_l2_22" -> listOf(R.drawable.estacion_colectora_industrial1, R.drawable.estacion_colectora_industrial2)
+            "est_l2_23" -> listOf(R.drawable.estacion_hermilio1, R.drawable.estacion_hermilio2)
+            "est_l2_24" -> listOf(R.drawable.estacion_mercado_santa_anita1, R.drawable.estacion_mercado_santa_anita2)
+            "est_l2_25" -> listOf(R.drawable.estacion_vista_alegre1, R.drawable.estacion_vista_alegre2)
+            "est_l2_26" -> listOf(R.drawable.estacion_javier_prado1, R.drawable.estacion_de_javier_prado2) // Ojo: "de_javier_prado2"
+            "est_l2_27" -> listOf(R.drawable.estacion_municipalidad_de_ate1, R.drawable.estacion_municipalidad_de_ate2)
+
+
+
+
             // Fallback
             else -> listOf(R.drawable.estacion_villa_el_salvador_1, R.drawable.estacion_villa_el_salvador_2)
         }
