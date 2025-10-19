@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.gonzales.metrolimago.R
 import com.gonzales.metrolimago.data.local.entities.Estacion
 import com.gonzales.metrolimago.data.local.entities.Paradero
@@ -31,6 +32,7 @@ import com.gonzales.metrolimago.ui.theme.MetroColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListaEstacionesScreen(
+    navController: NavController, // <--- AÑADE EL PARÁMETRO AQUÍ
     onEstacionClick: (String) -> Unit,
     onParaderoClick: (String) -> Unit,
     onBackClick: () -> Unit,

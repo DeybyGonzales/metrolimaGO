@@ -17,4 +17,17 @@ interface CorredorDao {
 
     @Delete
     suspend fun delete(corredor: Corredor)
+    @Query("""
+    SELECT * FROM corredores
+    WHERE LOWER(color) LIKE '%' || LOWER(:needle) || '%'
+       OR LOWER(nombre) LIKE '%' || LOWER(:needle) || '%'
+    ORDER BY nombre ASC
+""")
+    fun getCorredoresByColorLike(needle: String): kotlinx.coroutines.flow.Flow<List<Corredor>>
+
+    @Query("SELECT DISTINCT color FROM corredores")
+    fun getDistinctColores(): kotlinx.coroutines.flow.Flow<List<String>>
+
+
+
 }

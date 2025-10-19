@@ -2,6 +2,7 @@ package com.gonzales.metrolimago.data.local.dao
 
 import androidx.room.*
 import com.gonzales.metrolimago.data.local.entities.Estacion
+import com.gonzales.metrolimago.data.local.entities.Paradero
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -35,4 +36,24 @@ interface EstacionDao {
 
     @Query("DELETE FROM estaciones")
     suspend fun deleteAll()
+    @Query("""
+    SELECT * FROM estaciones 
+    WHERE LOWER(linea) LIKE '%' || LOWER(:needle) || '%' 
+    ORDER BY orden ASC
+    """)
+    fun getEstacionesByLineaLike(needle: String): Flow<List<Estacion>>
+
+    @Query("SELECT DISTINCT linea FROM estaciones")
+    fun getDistinctLineas(): Flow<List<String>>
+
+    @Query("""
+        SELECT * FROM paraderos
+        WHERE LOWER(corredor) LIKE '%' || LOWER(:needle) || '%'
+        ORDER BY nombre ASC
+    """)
+    fun getParaderosByCorredorLike(needle: String): Flow<List<Paradero>>
+
+    @Query("SELECT DISTINCT corredor FROM paraderos")
+    fun getDistinctCorredores(): Flow<List<String>>
+
 }

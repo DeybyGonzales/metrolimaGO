@@ -1,5 +1,6 @@
 package com.gonzales.metrolimago.ui.screens.components.home
 
+import com.gonzales.metrolimago.ui.screens.components.QuickActionCard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,6 +24,8 @@ import com.gonzales.metrolimago.R
 import com.gonzales.metrolimago.home.navigation.Screen
 import com.gonzales.metrolimago.util.LanguageManager
 
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -30,7 +33,12 @@ fun HomeScreen(
     onNavigateToPlanificador: () -> Unit,
     onNavigateToPlanificadorCorredores: () -> Unit = {},  // ✅ NUEVO PARÁMETRO
     onNavigateToFavoritos: () -> Unit = {},
-    navToConfiguracion: ((String) -> Unit)? = null
+    navToConfiguracion: ((String) -> Unit)? = null,
+    onNavigateToChat: () -> Unit, // 👈 nuevo
+
+
+
+
 ) {
     val context = LocalContext.current
     val gradientColors = listOf(Color(0xFF6A1B9A), Color(0xFF9C27B0))
@@ -142,6 +150,14 @@ fun HomeScreen(
                         iconColor = Color(0xFFD32F2F),
                         onClick = onNavigateToFavoritos
                     )
+                    QuickActionCard(
+                        icon = Icons.Default.ChatBubbleOutline,
+                        title = "Chat",
+                        subtitle = "Pregúntame por estaciones",
+                        onClick = onNavigateToChat // 👈 aquí
+                    )
+
+
 
                     // Card: Estado del servicio
                     Card(

@@ -22,21 +22,23 @@ import com.gonzales.metrolimago.data.local.entities.Paradero
 import com.gonzales.metrolimago.estaciones.EstacionesViewModel
 import com.gonzales.metrolimago.estaciones.ListaEstacionesScreen
 import com.gonzales.metrolimago.estaciones.RutaResult
-import com.gonzales.metrolimago.estaciones.RutaCorredorResult  // ✅ NUEVO
+import com.gonzales.metrolimago.estaciones.RutaCorredorResult
 import com.gonzales.metrolimago.ui.screens.components.home.HomeScreen
 import com.gonzales.metrolimago.estaciones.DetalleParaderoScreen
 import com.gonzales.metrolimago.ui.screens.mapa.MapaEstacionScreen
 import com.gonzales.metrolimago.ui.screens.mapa.MapaParaderoScreen
 import com.gonzales.metrolimago.ui.screens.mapa.MapaRutaScreen
-import com.gonzales.metrolimago.ui.screens.mapa.MapaRutaCorredoresScreen  // ✅ NUEVO
+import com.gonzales.metrolimago.ui.screens.mapa.MapaRutaCorredoresScreen
 import com.gonzales.metrolimago.ui.screens.planificador.PlanificadorScreen
-import com.gonzales.metrolimago.ui.screens.planificador.PlanificadorCorredoresScreen  // ✅ NUEVO
+import com.gonzales.metrolimago.ui.screens.planificador.PlanificadorCorredoresScreen
 import com.gonzales.metrolimago.ui.screens.estaciones.DetalleEstacionScreen
 import com.gonzales.metrolimago.ui.screens.components.ConfiguracionScreen
 import com.gonzales.metrolimago.ui.screens.FavoritosScreen
+import com.gonzales.metrolimago.ui.screens.chatbot.ChatbotScreen
 import com.gonzales.metrolimago.ui.screens.splash.SplashScreen
 
 sealed class Screen(val route: String) {
+    object Chat : Screen("chat")
     object Splash : Screen("splash")
     object Home : Screen("home")
     object ListaEstaciones : Screen("estaciones")
@@ -47,20 +49,17 @@ sealed class Screen(val route: String) {
         fun createRoute(paraderoId: String) = "paradero/$paraderoId"
     }
     object Planificador : Screen("planificador")
-    object PlanificadorCorredores : Screen("planificador_corredores")  // ✅ NUEVO
+    object PlanificadorCorredores : Screen("planificador_corredores")
     object Configuracion : Screen("configuracion")
     object Favoritos : Screen("favoritos")
-
     object MapaEstacion : Screen("mapa/{estacionId}") {
         fun createRoute(estacionId: String) = "mapa/$estacionId"
     }
-
     object MapaParadero : Screen("mapa-paradero/{paraderoId}") {
         fun createRoute(paraderoId: String) = "mapa-paradero/$paraderoId"
     }
-
     object MapaRuta : Screen("mapa_ruta")
-    object MapaRutaCorredor : Screen("mapa_ruta_corredor")  // ✅ NUEVO
+    object MapaRutaCorredor : Screen("mapa_ruta_corredor")
 }
 
 @Composable
@@ -81,6 +80,10 @@ fun MetroNavigation() {
             )
         }
 
+        composable(Screen.Chat.route) {
+            ChatbotScreen(navController = navController)
+        }
+
         composable(Screen.Home.route) {
             HomeScreen(
                 onNavigateToEstaciones = {
@@ -89,7 +92,7 @@ fun MetroNavigation() {
                 onNavigateToPlanificador = {
                     navController.navigate(Screen.Planificador.route)
                 },
-                onNavigateToPlanificadorCorredores = {  // ✅ NUEVO
+                onNavigateToPlanificadorCorredores = {
                     navController.navigate(Screen.PlanificadorCorredores.route)
                 },
                 navToConfiguracion = { route ->
@@ -97,12 +100,20 @@ fun MetroNavigation() {
                 },
                 onNavigateToFavoritos = {
                     navController.navigate(Screen.Favoritos.route)
+                },
+                onNavigateToChat = {
+                    navController.navigate(Screen.Chat.route)
                 }
             )
         }
 
+
+
+
+
         composable(Screen.ListaEstaciones.route) {
             ListaEstacionesScreen(
+                navController = navController,
                 onEstacionClick = { estacionId ->
                     navController.navigate(Screen.DetalleEstacion.createRoute(estacionId))
                 },
@@ -179,7 +190,6 @@ fun MetroNavigation() {
             )
         }
 
-        // ✅ NUEVA RUTA: Planificador de Corredores
         composable(Screen.PlanificadorCorredores.route) {
             PlanificadorCorredoresScreen(
                 onBackClick = {
@@ -282,7 +292,6 @@ fun MetroNavigation() {
             }
         }
 
-        // ✅ NUEVA RUTA: Mapa de Ruta de Corredores
         composable(Screen.MapaRutaCorredor.route) {
             val rutaCorredorResult = navController.previousBackStackEntry
                 ?.savedStateHandle
