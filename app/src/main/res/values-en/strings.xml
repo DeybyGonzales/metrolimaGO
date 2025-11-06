@@ -1,0 +1,41 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">MetroLimaGO</string>
+
+    <!-- Main Screen -->
+    <string name="titulo_principal">Metro Line 1</string>
+    <string name="subtitulo_principal">Explore all stations</string>
+    <string name="buscar_estacion">Search station...</string>
+    <string name="todas_estaciones">All Stations</string>
+    <string name="estaciones_cercanas">Nearby Stations</string>
+    <string name="ver_mapa">View Map</string>
+
+    <!-- Station Detail -->
+    <string name="detalle_estacion">Station Details</string>
+    <string name="distrito">District</string>
+    <string name="horario">Schedule</string>
+    <string name="linea">Line</string>
+    <string name="orden">Order</string>
+    <string name="estacion_numero">Station #%1$d</string>
+    <string name="linea_numero">Line %1$d</string>
+
+    <!-- Navigation -->
+    <string name="inicio">Home</string>
+    <string name="estaciones">Stations</string>
+    <string name="mapa">Map</string>
+    <string name="favoritos">Favorites</string>
+    <string name="configuracion">Settings</string>
+
+    <!-- Settings/Language -->
+    <string name="seleccionar_idioma">Select Language</string>
+    <string name="idioma_espanol">Español</string>
+    <string name="idioma_ingles">English</string>
+    <string name="idioma_actual">Current language</string>
+    <string name="cambiar_idioma">Change language</string>
+
+    <!-- Messages -->
+    <string name="sin_estaciones">No stations found</string>
+    <string name="cargando">Loading...</string>
+    <string name="error_cargar">Error loading stations</string>
+    <string name="idioma_cambiado">Language changed successfully</string>
+</resources>

@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">MetroLimaGO</string>
+
+<string name="titulo_principal">Línea 1 del Metro</string>
+<string name="subtitulo_principal">Conoce todas las estaciones</string>
+<string name="buscar_estacion">Buscar estación...</string>
+<string name="todas_estaciones">Todas las estaciones</string>
+<string name="estaciones_cercanas">Estaciones Cercanas</string>
+<string name="ver_mapa">Ver Mapa</string>
+
+    <!-- Detalle de Estación -->
+<string name="detalle_estacion">Detalle de Estación</string>
+<string name="distrito">Distrito</string>
+<string name="horario">Horario</string>
+<string name="linea">Línea</string>
+<string name="orden">Orden</string>
+<string name="estacion_numero">Estación #%1$d</string>
+<string name="linea_numero">Línea %1$d</string>
+
+    <!-- Navegación -->
+<string name="inicio">Inicio</string>
+<string name="estaciones">Estaciones</string>
+<string name="mapa">Mapa</string>
+<string name="favoritos">Favoritos</string>
+<string name="configuracion">Configuración</string>
+
+    <!-- Configuración/Idioma -->
+<string name="seleccionar_idioma">Seleccionar Idioma</string>
+<string name="idioma_espanol">Español</string>
+<string name="idioma_ingles">English</string>
+<string name="idioma_actual">Idioma actual</string>
+<string name="cambiar_idioma">Cambiar idioma</string>
+
+    <!-- Mensajes -->
+<string name="sin_estaciones">No se encontraron estaciones</string>
+<string name="cargando">Cargando...</string>
+<string name="error_cargar">Error al cargar estaciones</string>
+<string name="idioma_cambiado">Idioma cambiado correctamente</string>
+    </resources>
