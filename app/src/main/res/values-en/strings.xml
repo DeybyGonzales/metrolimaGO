@@ -1,5 +1,6 @@
-<!-- res/values-en/strings.xml (INGLÉS) -->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- App -->
     <string name="app_name">MetroLimaGO</string>
 
@@ -16,8 +17,13 @@
     <string name="planifica_viaje_desc">Find the best route to your destination</string>
     <string name="explorar_estaciones">Explore stations</string>
     <string name="explorar_estaciones_desc">Check information for all stations</string>
+    <string name="mis_favoritos_desc">Quickly access your saved stations</string>
     <string name="servicio_operativo">Service Operational</string>
     <string name="servicio_operativo_desc">All lines operating normally</string>
+
+    <!-- ✅ NUEVOS - Agrega estas dos líneas -->
+    <string name="linea_1_linea_2">Metro Line 1 and Line 2</string>
+    <string name="corredores_complementarios">Complementary Corridors</string>
 
     <!-- Station Detail -->
     <string name="detalle_estacion">Station Details</string>
@@ -36,7 +42,7 @@
     <string name="configuracion">Settings</string>
 
     <!-- Settings/Language -->
-    <string name="seleccionar_idioma">Select Language</string>
+    <string name="seleccionar_idioma">Select language</string>
     <string name="idioma_espanol">Spanish</string>
     <string name="idioma_ingles">English</string>
     <string name="idioma_actual">Current language</string>
@@ -48,7 +54,7 @@
     <string name="error_cargar">Error loading stations</string>
     <string name="idioma_cambiado">Language changed successfully</string>
 
-    <!-- Planner -->
+    <!-- Planner (Line 1 and 2) -->
     <string name="instruccion_planificador">Select your origin and destination to calculate the best route</string>
     <string name="origen">Origin</string>
     <string name="destino">Destination</string>
@@ -66,6 +72,13 @@
     <string name="ver_ruta_mapa">View route on map</string>
     <string name="volver">Back</string>
 
+    <!-- Planner (Complementary Corridors) -->
+    <string name="selecciona_corredor">SELECT A CORRIDOR</string>
+    <string name="instruccion_corredor">Select your origin and destination within the same corridor</string>
+    <string name="selecciona_paradero">Select a stop</string>
+    <string name="ruta_calculada_corredor">Route Calculated</string>
+    <string name="recorrido_corredor">Route</string>
+
     <!-- Station List -->
     <string name="transporte">Transport</string>
     <string name="buscar">Search...</string>
@@ -79,4 +92,5 @@
     <string name="sin_favoritos_desc">Tap the ❤️ icon on any station or stop to add it to your favorites</string>
     <string name="total_favoritos">%1$d saved favorites</string>
     <string name="toca_corazon_quitar">Tap the heart again to remove from favorites</string>
+
 </resources>

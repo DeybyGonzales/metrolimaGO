@@ -106,8 +106,8 @@ fun HomeScreen(
                     // ✅ 1. Card: Planifica tu viaje (Línea 1 y 2)
                     MenuCard(
                         icon = Icons.Default.Train,
-                        title = "Planifica tu viaje",
-                        subtitle = "Línea 1 y Línea 2 del Metro",
+                        title = stringResource(R.string.planifica_viaje),
+                        subtitle = stringResource(R.string.linea_1_linea_2),
                         backgroundColor = Color(0xFFE3F2FD),
                         iconColor = Color(0xFF1976D2),
                         onClick = onNavigateToPlanificador
@@ -116,8 +116,8 @@ fun HomeScreen(
                     // ✅ 2. Card: Planifica tu viaje (Corredores) - NUEVO
                     MenuCard(
                         icon = Icons.Default.DirectionsBus,
-                        title = "Planifica tu viaje",
-                        subtitle = "Corredores Complementarios",
+                        title = stringResource(R.string.planifica_viaje),
+                        subtitle = stringResource(R.string.corredores_complementarios),
                         backgroundColor = Color(0xFFFFF3E0),
                         iconColor = Color(0xFFFF6F00),
                         onClick = onNavigateToPlanificadorCorredores

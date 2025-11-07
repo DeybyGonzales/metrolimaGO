@@ -13,9 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gonzales.metrolimago.R
 import com.gonzales.metrolimago.data.local.entities.Paradero
 import com.gonzales.metrolimago.estaciones.EstacionesViewModel
 import com.gonzales.metrolimago.estaciones.RutaCorredorResult
@@ -52,7 +55,12 @@ fun PlanificadorCorredoresScreen(
             origenSeleccionado?.id != destinoSeleccionado?.id
 
     // Función para calcular la ruta entre paraderos
-    fun calcularRutaCorredor(origen: Paradero, destino: Paradero): RutaCorredorResult {
+    fun calcularRutaCorredor(origen: Paradero, destino: Paradero): RutaCorredorResult? {
+        // ✅ VALIDACIÓN: Verificar que sean del mismo corredor
+        if (origen.corredor != destino.corredor) {
+            return null
+        }
+
         // Filtrar paraderos del mismo corredor y ordenar
         val paraderosRuta = paraderos
             .filter { it.corredor == origen.corredor }
@@ -60,6 +68,11 @@ fun PlanificadorCorredoresScreen(
 
         val indiceOrigen = paraderosRuta.indexOfFirst { it.id == origen.id }
         val indiceDestino = paraderosRuta.indexOfFirst { it.id == destino.id }
+
+        // ✅ VALIDACIÓN: Verificar que ambos índices sean válidos
+        if (indiceOrigen == -1 || indiceDestino == -1) {
+            return null
+        }
 
         val paraderosEnRuta = if (indiceOrigen < indiceDestino) {
             paraderosRuta.subList(indiceOrigen, indiceDestino + 1)
@@ -89,13 +102,13 @@ fun PlanificadorCorredoresScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Planifica tu viaje - Corredores",
+                        stringResource(R.string.planifica_viaje) + " - " + stringResource(R.string.corredores_complementarios),
                         fontWeight = FontWeight.Bold
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, "Volver")
+                        Icon(Icons.Default.ArrowBack, stringResource(R.string.volver))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -114,6 +127,41 @@ fun PlanificadorCorredoresScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // 🚌 Recuadro grande con nombre del corredor
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = when (origenSeleccionado?.corredor?.lowercase()) {
+                        "azul" -> Color(0xFF1565C0) // Azul oscuro y fuerte
+                        "rojo" -> Color(0xFFC62828)  // Rojo oscuro y fuerte
+                        else -> Color(0xFFFF6F00).copy(alpha = 0.2f)
+                    }
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = when (origenSeleccionado?.corredor?.lowercase()) {
+                            "azul" -> "CORREDOR AZUL"
+                            "rojo" -> "CORREDOR ROJO"
+                            else -> stringResource(R.string.selecciona_corredor)
+                        },
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 22.sp,
+                        color = if (origenSeleccionado != null) Color.White else Color(0xFFFF6F00),
+                        letterSpacing = 1.sp
+                    )
+                }
+            }
+
             // Instrucciones
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -133,9 +181,10 @@ fun PlanificadorCorredoresScreen(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        "Selecciona tu origen y destino del mismo corredor",
+                        stringResource(R.string.instruccion_corredor),
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -161,7 +210,7 @@ fun PlanificadorCorredoresScreen(
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            "Origen",
+                            stringResource(R.string.origen),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -174,7 +223,7 @@ fun PlanificadorCorredoresScreen(
                         onExpandedChange = { expandedOrigen = !expandedOrigen }
                     ) {
                         OutlinedTextField(
-                            value = origenSeleccionado?.nombre ?: "Selecciona un paradero",
+                            value = origenSeleccionado?.nombre ?: stringResource(R.string.selecciona_paradero),
                             onValueChange = {},
                             readOnly = true,
                             modifier = Modifier
@@ -203,10 +252,11 @@ fun PlanificadorCorredoresScreen(
                                                     .width(4.dp)
                                                     .height(48.dp)
                                                     .background(
-                                                        Color(getColorCorredor(paradero.corredor)
-                                                            .removePrefix("#")
-                                                            .toLong(16)
-                                                            .toInt())
+                                                        when (paradero.corredor.lowercase()) {
+                                                            "azul" -> Color(0xFF2196F3)
+                                                            "rojo" -> Color(0xFFF44336)
+                                                            else -> Color.Gray
+                                                        }
                                                     )
                                             )
                                             Spacer(modifier = Modifier.width(12.dp))
@@ -214,13 +264,14 @@ fun PlanificadorCorredoresScreen(
                                                 Text(
                                                     text = paradero.nombre,
                                                     style = MaterialTheme.typography.bodyLarge,
-                                                    fontWeight = FontWeight.Medium
+                                                    fontWeight = FontWeight.Medium,
+                                                    color = MaterialTheme.colorScheme.onSurface
                                                 )
                                                 Text(
                                                     "Corredor ${paradero.corredor.capitalize()}",
                                                     style = MaterialTheme.typography.bodySmall,
                                                     color = when (paradero.corredor.lowercase()) {
-                                                        "azul" -> Color(0xFF0D47A1)
+                                                        "azul" -> Color(0xFF1976D2)
                                                         "rojo" -> Color(0xFFD32F2F)
                                                         else -> Color.Gray
                                                     }
@@ -274,7 +325,7 @@ fun PlanificadorCorredoresScreen(
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            "Destino",
+                            stringResource(R.string.destino),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -287,7 +338,7 @@ fun PlanificadorCorredoresScreen(
                         onExpandedChange = { expandedDestino = !expandedDestino }
                     ) {
                         OutlinedTextField(
-                            value = destinoSeleccionado?.nombre ?: "Selecciona un paradero",
+                            value = destinoSeleccionado?.nombre ?: stringResource(R.string.selecciona_paradero),
                             onValueChange = {},
                             readOnly = true,
                             modifier = Modifier
@@ -317,8 +368,8 @@ fun PlanificadorCorredoresScreen(
                                                     .height(48.dp)
                                                     .background(
                                                         when (paradero.corredor.lowercase()) {
-                                                            "azul" -> Color(0xFF0D47A1)
-                                                            "rojo" -> Color(0xFFD32F2F)
+                                                            "azul" -> Color(0xFF2196F3)
+                                                            "rojo" -> Color(0xFFF44336)
                                                             else -> Color.Gray
                                                         }
                                                     )
@@ -328,13 +379,14 @@ fun PlanificadorCorredoresScreen(
                                                 Text(
                                                     text = paradero.nombre,
                                                     style = MaterialTheme.typography.bodyLarge,
-                                                    fontWeight = FontWeight.Medium
+                                                    fontWeight = FontWeight.Medium,
+                                                    color = MaterialTheme.colorScheme.onSurface
                                                 )
                                                 Text(
                                                     "Corredor ${paradero.corredor.capitalize()}",
                                                     style = MaterialTheme.typography.bodySmall,
                                                     color = when (paradero.corredor.lowercase()) {
-                                                        "azul" -> Color(0xFF0D47A1)
+                                                        "azul" -> Color(0xFF1976D2)
                                                         "rojo" -> Color(0xFFD32F2F)
                                                         else -> Color.Gray
                                                     }
@@ -376,7 +428,8 @@ fun PlanificadorCorredoresScreen(
                         Text(
                             "Los paraderos deben ser del mismo corredor",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFFE65100)
+                            color = Color(0xFFE65100),
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
@@ -388,10 +441,11 @@ fun PlanificadorCorredoresScreen(
                     if (puedeCalcular) {
                         scope.launch {
                             isCalculating = true
-                            resultado = calcularRutaCorredor(
+                            val rutaCalculada = calcularRutaCorredor(
                                 origenSeleccionado!!,
                                 destinoSeleccionado!!
                             )
+                            resultado = rutaCalculada
                             isCalculating = false
                         }
                     }
@@ -412,11 +466,11 @@ fun PlanificadorCorredoresScreen(
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Calculando...")
+                    Text(stringResource(R.string.calculando))
                 } else {
                     Icon(Icons.Default.Route, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Calcular Ruta", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.calcular_ruta), style = MaterialTheme.typography.titleMedium)
                 }
             }
 
@@ -446,7 +500,7 @@ fun ResultadoRutaCorredor(
         Column(modifier = Modifier.padding(16.dp)) {
             // Header del resultado
             Text(
-                "Ruta Calculada",
+                stringResource(R.string.ruta_calculada_corredor),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFFF6F00)
@@ -454,29 +508,16 @@ fun ResultadoRutaCorredor(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Info resumida
+            // Info resumida (MÁS COMPACTA)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                InfoChipCorredor(
-                    icon = Icons.Default.DirectionsBus,
-                    label = "Corredor ${ruta.corredor.capitalize()}",
-                    color = Color(ruta.colorCorredor.removePrefix("#").toLong(16).toInt())
-                )
                 InfoChipCorredor(
                     icon = Icons.Default.AccessTime,
                     label = "${ruta.tiempoEstimado} min",
                     color = Color(0xFF2196F3)
                 )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
                 InfoChipCorredor(
                     icon = Icons.Default.Pin,
                     label = "${ruta.numeroParaderos} paradas",
@@ -484,7 +525,7 @@ fun ResultadoRutaCorredor(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Tarifas
             Row(
@@ -503,18 +544,18 @@ fun ResultadoRutaCorredor(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Divider()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Lista de paraderos
             Text(
-                "Recorrido",
+                stringResource(R.string.recorrido_corredor),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             ruta.paraderos.forEachIndexed { index, paradero ->
                 ParaderoItem(
@@ -526,14 +567,14 @@ fun ResultadoRutaCorredor(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Botón Ver en Mapa
             Button(
                 onClick = onVerEnMapa,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(52.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF00C853)
@@ -541,7 +582,7 @@ fun ResultadoRutaCorredor(
             ) {
                 Icon(Icons.Default.Map, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Ver Ruta en Mapa", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.ver_ruta_mapa), style = MaterialTheme.typography.titleMedium)
             }
         }
     }
@@ -635,7 +676,8 @@ fun ParaderoItem(
             Text(
                 text = paradero.nombre,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = if (isOrigen || isDestino) FontWeight.Bold else FontWeight.Normal
+                fontWeight = if (isOrigen || isDestino) FontWeight.Bold else FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onSurface
             )
             if (isOrigen || isDestino) {
                 Text(
@@ -651,8 +693,8 @@ fun ParaderoItem(
 // Función auxiliar para obtener colores de corredores
 fun getColorCorredor(corredor: String): String {
     return when (corredor.lowercase()) {
-        "azul" -> "#0D47A1"
-        "rojo" -> "#D32F2F"
+        "azul" -> "#2196F3"
+        "rojo" -> "#F44336"
         else -> "#757575"
     }
 }

@@ -1,5 +1,6 @@
 package com.gonzales.metrolimago.ui.screens.mapa
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -24,6 +25,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +63,34 @@ fun MapaRutaCorredoresScreen(
                     navigationIconContentColor = Color.White
                 )
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    mapView?.let { map ->
+                        val allPoints = ruta.paraderos.map {
+                            GeoPoint(it.latitud, it.longitud)
+                        }
+                        if (allPoints.isNotEmpty()) {
+                            val bounds = org.osmdroid.util.BoundingBox.fromGeoPoints(allPoints)
+                            val expandedBounds = org.osmdroid.util.BoundingBox(
+                                bounds.latNorth + 0.01,
+                                bounds.lonEast + 0.01,
+                                bounds.latSouth - 0.01,
+                                bounds.lonWest - 0.01
+                            )
+                            map.zoomToBoundingBox(expandedBounds, true)
+                        }
+                    }
+                },
+                containerColor = Color(0xFFFF6F00)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MyLocation,
+                    contentDescription = "Ver ruta completa",
+                    tint = Color.White
+                )
+            }
         }
     ) { padding ->
         Box(
@@ -67,180 +98,162 @@ fun MapaRutaCorredoresScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Mapa
+            // 🗺️ Mapa con ubicación en tiempo real
             AndroidView(
-                factory = { ctx ->
-                    MapView(ctx).apply {
-                        setTileSource(TileSourceFactory.MAPNIK)
-                        setMultiTouchControls(true)
-
-                        // Configurar zoom y centro inicial
-                        val puntoInicial = GeoPoint(
-                            ruta.origen.latitud,
-                            ruta.origen.longitud
-                        )
-                        controller.setZoom(14.0)
-                        controller.setCenter(puntoInicial)
-
-                        mapView = this
-                    }
-                },
                 modifier = Modifier.fillMaxSize(),
-                update = { map ->
-                    map.overlays.clear()
-
-                    // Dibujar línea de ruta
-                    val polyline = Polyline().apply {
-                        outlinePaint.color = android.graphics.Color.parseColor(
-                            ruta.colorCorredor
-                        )
-                        outlinePaint.strokeWidth = 12f
-
-                        ruta.paraderos.forEach { paradero ->
-                            addPoint(GeoPoint(paradero.latitud, paradero.longitud))
-                        }
-                    }
-                    map.overlays.add(polyline)
-
-                    // Agregar marcadores para cada paradero
-                    ruta.paraderos.forEachIndexed { index, paradero ->
-                        val marker = Marker(map).apply {
-                            position = GeoPoint(paradero.latitud, paradero.longitud)
-                            title = paradero.nombre
-
-                            // Personalizar icono según si es origen, destino u otro
-                            when {
-                                index == 0 -> {
-                                    // Origen - marcador verde
-                                    snippet = "🟢 Origen"
-                                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                                }
-                                index == ruta.paraderos.size - 1 -> {
-                                    // Destino - marcador rojo
-                                    snippet = "🔴 Destino"
-                                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                                }
-                                else -> {
-                                    // Paradero intermedio
-                                    snippet = "Parada ${index + 1}"
-                                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                                }
-                            }
-                        }
-                        map.overlays.add(marker)
-                    }
-
-                    map.invalidate()
+                factory = { ctx ->
+                    createMapViewWithRouteAndLocation(ctx, ruta).also { mapView = it }
                 }
             )
 
-            // Información de la ruta en la parte inferior
-            Column(
+            // 📋 Información de la ruta en la parte inferior
+            Card(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White.copy(alpha = 0.95f)
+                ),
+                elevation = CardDefaults.cardElevation(8.dp)
             ) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.95f)
-                    ),
-                    elevation = CardDefaults.cardElevation(8.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Origen
-                            Column(modifier = Modifier.weight(1f)) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(12.dp)
-                                            .background(Color(0xFF4CAF50), CircleShape)
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        ruta.origen.nombre,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            }
-                        }
+                Column(modifier = Modifier.padding(16.dp)) {
+                    // Origen
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(Color(0xFF4CAF50), CircleShape)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            "🟢 ${ruta.origen.nombre}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // Destino
-                            Column(modifier = Modifier.weight(1f)) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(12.dp)
-                                            .background(Color(0xFFF44336), CircleShape)
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        ruta.destino.nombre,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            }
-                        }
+                    // Destino
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(Color(0xFFF44336), CircleShape)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            "🔴 ${ruta.destino.nombre}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
-                        Divider(modifier = Modifier.padding(vertical = 12.dp))
+                    Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-                        // Info del corredor
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
+                    // Info del viaje
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(horizontalAlignment = Alignment.Start) {
                             InfoItemMapa(
                                 icon = Icons.Default.DirectionsBus,
-                                text = ruta.corredor,
+                                text = "Corredor ${ruta.corredor.capitalize()}",
                                 color = Color(
                                     ruta.colorCorredor.removePrefix("#").toLong(16).toInt()
                                 )
                             )
-                            InfoItemMapa(
-                                icon = Icons.Default.MyLocation,
+                        }
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(
+                                text = "${ruta.tiempoEstimado} min",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFFF6F00)
+                            )
+                            Text(
                                 text = "${ruta.numeroParaderos} paradas",
-                                color = Color(0xFF2196F3)
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
                 }
             }
-
-            // Botón para centrar en origen
-            FloatingActionButton(
-                onClick = {
-                    mapView?.controller?.animateTo(
-                        GeoPoint(ruta.origen.latitud, ruta.origen.longitud)
-                    )
-                },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp),
-                containerColor = Color.White
-            ) {
-                Icon(
-                    Icons.Default.MyLocation,
-                    contentDescription = "Centrar en origen",
-                    tint = Color(0xFFFF6F00)
-                )
-            }
         }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            mapView?.onDetach()
+        }
+    }
+}
+
+private fun createMapViewWithRouteAndLocation(
+    context: Context,
+    ruta: RutaCorredorResult
+): MapView {
+    return MapView(context).apply {
+        setTileSource(TileSourceFactory.MAPNIK)
+        setMultiTouchControls(true)
+
+        // 🔹 ACTIVAR UBICACIÓN EN TIEMPO REAL (punto azul)
+        val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), this)
+        locationOverlay.enableMyLocation()
+        locationOverlay.enableFollowLocation()
+        overlays.add(locationOverlay)
+
+        minZoomLevel = 10.0
+        maxZoomLevel = 19.0
+
+        // Crear puntos de la ruta
+        val puntos = ruta.paraderos.map {
+            GeoPoint(it.latitud, it.longitud)
+        }
+
+        // Dibujar línea de ruta con el color del corredor
+        val polyline = Polyline().apply {
+            outlinePaint.color = android.graphics.Color.parseColor(ruta.colorCorredor)
+            outlinePaint.strokeWidth = 12f
+            setPoints(puntos)
+        }
+        overlays.add(polyline)
+
+        // Agregar marcadores para cada paradero
+        ruta.paraderos.forEachIndexed { index, paradero ->
+            val marker = Marker(this).apply {
+                position = GeoPoint(paradero.latitud, paradero.longitud)
+                title = paradero.nombre
+                snippet = when {
+                    index == 0 -> "🟢 Origen - ${paradero.zona}"
+                    index == ruta.paraderos.size - 1 -> "🔴 Destino - ${paradero.zona}"
+                    else -> "Parada ${index + 1} - ${paradero.zona}"
+                }
+                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            }
+            overlays.add(marker)
+        }
+
+        // Ajustar zoom con padding para mostrar toda la ruta
+        postDelayed({
+            val bounds = org.osmdroid.util.BoundingBox.fromGeoPoints(puntos)
+            val expandedBounds = org.osmdroid.util.BoundingBox(
+                bounds.latNorth + 0.01,
+                bounds.lonEast + 0.01,
+                bounds.latSouth - 0.01,
+                bounds.lonWest - 0.01
+            )
+            zoomToBoundingBox(expandedBounds, true)
+        }, 300)
     }
 }
 

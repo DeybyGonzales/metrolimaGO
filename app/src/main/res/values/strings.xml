@@ -1,5 +1,6 @@
-<!-- res/values/strings.xml (ESPAÑOL) -->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- App -->
     <string name="app_name">MetroLimaGO</string>
 
@@ -19,6 +20,10 @@
     <string name="mis_favoritos_desc">Accede rápidamente a tus estaciones guardadas</string>
     <string name="servicio_operativo">Servicio Operativo</string>
     <string name="servicio_operativo_desc">Todas las líneas operan con normalidad</string>
+
+    <!-- ✅ NUEVOS - Agrega estas dos líneas -->
+    <string name="linea_1_linea_2">Línea 1 y Línea 2 del Metro</string>
+    <string name="corredores_complementarios">Corredores Complementarios</string>
 
     <!-- Station Detail -->
     <string name="detalle_estacion">Detalles de la estación</string>
@@ -49,7 +54,7 @@
     <string name="error_cargar">Error al cargar las estaciones</string>
     <string name="idioma_cambiado">Idioma cambiado correctamente</string>
 
-    <!-- Planificador -->
+    <!-- Planificador (Línea 1 y 2) -->
     <string name="instruccion_planificador">Selecciona tu origen y destino para calcular la mejor ruta</string>
     <string name="origen">Origen</string>
     <string name="destino">Destino</string>
@@ -67,6 +72,13 @@
     <string name="ver_ruta_mapa">Ver ruta en mapa</string>
     <string name="volver">Volver</string>
 
+    <!-- Planificador (Corredores Complementarios) -->
+    <string name="selecciona_corredor">SELECCIONA UN CORREDOR</string>
+    <string name="instruccion_corredor">Selecciona tu origen y destino del mismo corredor</string>
+    <string name="selecciona_paradero">Selecciona un paradero</string>
+    <string name="ruta_calculada_corredor">Ruta Calculada</string>
+    <string name="recorrido_corredor">Recorrido</string>
+
     <!-- Lista Estaciones -->
     <string name="transporte">Transporte</string>
     <string name="buscar">Buscar...</string>
@@ -80,4 +92,5 @@
     <string name="sin_favoritos_desc">Toca el ícono ❤️ en cualquier estación o paradero para agregarlo a tus favoritos</string>
     <string name="total_favoritos">%1$d favoritos guardados</string>
     <string name="toca_corazon_quitar">Toca el corazón nuevamente para quitar de favoritos</string>
+
 </resources>
