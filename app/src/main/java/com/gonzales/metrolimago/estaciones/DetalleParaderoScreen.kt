@@ -1,5 +1,6 @@
 package com.gonzales.metrolimago.estaciones
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,8 +13,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,7 +28,7 @@ import com.gonzales.metrolimago.data.local.entities.Paradero
 fun DetalleParaderoScreen(
     paraderoId: String,
     onBackClick: () -> Unit,
-    onMapClick: () -> Unit,  // ✅ NUEVO parámetro
+    onMapClick: () -> Unit,
     viewModel: EstacionesViewModel = viewModel()
 ) {
     var paradero by remember { mutableStateOf<Paradero?>(null) }
@@ -72,7 +76,7 @@ fun DetalleParaderoScreen(
                     .padding(padding)
                     .verticalScroll(rememberScrollState())
             ) {
-                // Header con nombre y corredor
+                // Header con nombre y corredor (AHORA CON LA IMAGEN)
                 HeaderParaderoSection(paradero = par)
 
                 // Información general
@@ -114,7 +118,7 @@ fun DetalleParaderoScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ✅ BOTONES DE ACCIÓN (Mapa y Compartir)
+                // BOTONES DE ACCIÓN (Mapa y Compartir)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -122,7 +126,7 @@ fun DetalleParaderoScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(
-                        onClick = onMapClick,  // ✅ Llamar al mapa
+                        onClick = onMapClick,
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -157,6 +161,9 @@ fun DetalleParaderoScreen(
     }
 }
 
+// -------------------------------------------------------------
+//  AQUÍ ESTÁ EL CAMBIO IMPORTANTE
+// -------------------------------------------------------------
 @Composable
 fun HeaderParaderoSection(paradero: Paradero) {
     Box(
@@ -171,15 +178,18 @@ fun HeaderParaderoSection(paradero: Paradero) {
         ) {
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .background(Color.White.copy(alpha = 0.3f), CircleShape),
+                    .size(80.dp) // Mantiene el tamaño del círculo
+                    .background(Color.White.copy(alpha = 0.3f), CircleShape)
+                    .clip(CircleShape), // Recorta la imagen en forma de círculo
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    Icons.Default.DirectionsBus,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = Color.White
+                // ✅ ¡CÓDIGO CORREGIDO!
+                // Se reemplazó Icon() por Image()
+                Image(
+                    painter = painterResource(id = paradero.imagenPrincipalResId),
+                    contentDescription = paradero.nombre,
+                    modifier = Modifier.fillMaxSize(), // Rellena el círculo
+                    contentScale = ContentScale.Crop // Recorta la foto para que encaje
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
