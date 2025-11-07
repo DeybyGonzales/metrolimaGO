@@ -1,6 +1,6 @@
 package com.gonzales.metrolimago.estaciones
 
-import androidx.compose.foundation.Image  // ← NUEVO
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,13 +14,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip  // ← NUEVO
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale  // ← NUEVO (si no lo tienes)
-import androidx.compose.ui.res.painterResource  // ← NUEVO
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gonzales.metrolimago.R
 import com.gonzales.metrolimago.data.local.entities.Estacion
 import com.gonzales.metrolimago.data.local.entities.Paradero
 import com.gonzales.metrolimago.ui.theme.MetroColors
@@ -42,10 +44,10 @@ fun ListaEstacionesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Transporte", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.transporte), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, "Volver")
+                        Icon(Icons.Default.ArrowBack, stringResource(R.string.volver))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -77,7 +79,7 @@ fun ListaEstacionesScreen(
                     FilterChip(
                         selected = selectedFilter == null,
                         onClick = { viewModel.onFilterSelected(null) },
-                        label = { Text("Todas") }
+                        label = { Text(stringResource(R.string.todas)) }
                     )
                 }
                 items(lineas) { linea ->
@@ -123,7 +125,7 @@ fun ListaEstacionesScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("No se encontraron resultados")
+                    Text(stringResource(R.string.no_resultados))
                 }
             } else {
                 LazyColumn(
@@ -170,14 +172,14 @@ fun SearchBar(
         value = query,
         onValueChange = onQueryChange,
         modifier = modifier,
-        placeholder = { Text("Buscar...") },
+        placeholder = { Text(stringResource(R.string.buscar)) },
         leadingIcon = {
-            Icon(Icons.Default.Search, "Buscar")
+            Icon(Icons.Default.Search, stringResource(R.string.buscar))
         },
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(onClick = { onQueryChange("") }) {
-                    Icon(Icons.Default.Clear, "Limpiar")
+                    Icon(Icons.Default.Clear, stringResource(R.string.limpiar))
                 }
             }
         },
@@ -205,7 +207,6 @@ fun EstacionCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 📸 NUEVA: Miniatura de la imagen
             Image(
                 painter = painterResource(id = estacion.imagenPrincipalResId),
                 contentDescription = estacion.nombre,
@@ -254,7 +255,7 @@ fun EstacionCard(
             IconButton(onClick = onFavoritoClick) {
                 Icon(
                     if (estacion.esFavorita) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorito",
+                    contentDescription = stringResource(R.string.favorito),
                     tint = if (estacion.esFavorita) Color.Red else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
@@ -322,7 +323,7 @@ fun ParaderoCard(
             IconButton(onClick = onFavoritoClick) {
                 Icon(
                     if (paradero.esFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorito",
+                    contentDescription = stringResource(R.string.favorito),
                     tint = if (paradero.esFavorito) Color.Red else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }

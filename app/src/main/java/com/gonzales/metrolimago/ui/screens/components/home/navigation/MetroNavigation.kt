@@ -22,17 +22,22 @@ import com.gonzales.metrolimago.data.local.entities.Paradero
 import com.gonzales.metrolimago.estaciones.EstacionesViewModel
 import com.gonzales.metrolimago.estaciones.ListaEstacionesScreen
 import com.gonzales.metrolimago.estaciones.RutaResult
+import com.gonzales.metrolimago.estaciones.RutaCorredorResult  // ✅ NUEVO
 import com.gonzales.metrolimago.ui.screens.components.home.HomeScreen
 import com.gonzales.metrolimago.estaciones.DetalleParaderoScreen
 import com.gonzales.metrolimago.ui.screens.mapa.MapaEstacionScreen
 import com.gonzales.metrolimago.ui.screens.mapa.MapaParaderoScreen
 import com.gonzales.metrolimago.ui.screens.mapa.MapaRutaScreen
+import com.gonzales.metrolimago.ui.screens.mapa.MapaRutaCorredoresScreen  // ✅ NUEVO
 import com.gonzales.metrolimago.ui.screens.planificador.PlanificadorScreen
+import com.gonzales.metrolimago.ui.screens.planificador.PlanificadorCorredoresScreen  // ✅ NUEVO
 import com.gonzales.metrolimago.ui.screens.estaciones.DetalleEstacionScreen
 import com.gonzales.metrolimago.ui.screens.components.ConfiguracionScreen
-
+import com.gonzales.metrolimago.ui.screens.FavoritosScreen
+import com.gonzales.metrolimago.ui.screens.splash.SplashScreen
 
 sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
     object Home : Screen("home")
     object ListaEstaciones : Screen("estaciones")
     object DetalleEstacion : Screen("estacion/{estacionId}") {
@@ -42,7 +47,9 @@ sealed class Screen(val route: String) {
         fun createRoute(paraderoId: String) = "paradero/$paraderoId"
     }
     object Planificador : Screen("planificador")
+    object PlanificadorCorredores : Screen("planificador_corredores")  // ✅ NUEVO
     object Configuracion : Screen("configuracion")
+    object Favoritos : Screen("favoritos")
 
     object MapaEstacion : Screen("mapa/{estacionId}") {
         fun createRoute(estacionId: String) = "mapa/$estacionId"
@@ -53,6 +60,7 @@ sealed class Screen(val route: String) {
     }
 
     object MapaRuta : Screen("mapa_ruta")
+    object MapaRutaCorredor : Screen("mapa_ruta_corredor")  // ✅ NUEVO
 }
 
 @Composable
@@ -61,8 +69,18 @@ fun MetroNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Splash.route
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onNavigateToHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Screen.Home.route) {
             HomeScreen(
                 onNavigateToEstaciones = {
@@ -71,14 +89,34 @@ fun MetroNavigation() {
                 onNavigateToPlanificador = {
                     navController.navigate(Screen.Planificador.route)
                 },
+                onNavigateToPlanificadorCorredores = {  // ✅ NUEVO
+                    navController.navigate(Screen.PlanificadorCorredores.route)
+                },
                 navToConfiguracion = { route ->
                     navController.navigate(route)
+                },
+                onNavigateToFavoritos = {
+                    navController.navigate(Screen.Favoritos.route)
                 }
             )
         }
 
         composable(Screen.ListaEstaciones.route) {
             ListaEstacionesScreen(
+                onEstacionClick = { estacionId ->
+                    navController.navigate(Screen.DetalleEstacion.createRoute(estacionId))
+                },
+                onParaderoClick = { paraderoId ->
+                    navController.navigate(Screen.DetalleParadero.createRoute(paraderoId))
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(Screen.Favoritos.route) {
+            FavoritosScreen(
                 onEstacionClick = { estacionId ->
                     navController.navigate(Screen.DetalleEstacion.createRoute(estacionId))
                 },
@@ -141,7 +179,21 @@ fun MetroNavigation() {
             )
         }
 
-        // ✅ NUEVA RUTA - Configuración
+        // ✅ NUEVA RUTA: Planificador de Corredores
+        composable(Screen.PlanificadorCorredores.route) {
+            PlanificadorCorredoresScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onMapaRutaClick = { rutaCorredorResult ->
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("ruta_corredor_result", rutaCorredorResult)
+                    navController.navigate(Screen.MapaRutaCorredor.route)
+                }
+            )
+        }
+
         composable(Screen.Configuracion.route) {
             ConfiguracionScreen(navController = navController)
         }
@@ -219,6 +271,27 @@ fun MetroNavigation() {
                 MapaRutaScreen(
                     ruta = it,
                     onBack = { navController.popBackStack() }
+                )
+            } ?: run {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+
+        // ✅ NUEVA RUTA: Mapa de Ruta de Corredores
+        composable(Screen.MapaRutaCorredor.route) {
+            val rutaCorredorResult = navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<RutaCorredorResult>("ruta_corredor_result")
+
+            rutaCorredorResult?.let {
+                MapaRutaCorredoresScreen(
+                    ruta = it,
+                    onBackClick = { navController.popBackStack() }
                 )
             } ?: run {
                 Box(

@@ -18,6 +18,10 @@ interface ParaderoDao {
     @Query("SELECT * FROM paraderos WHERE nombre LIKE '%' || :query || '%' ORDER BY orden ASC")
     fun searchParaderos(query: String): Flow<List<Paradero>>
 
+    // ✅ AGREGAR ESTA CONSULTA PARA OBTENER FAVORITOS
+    @Query("SELECT * FROM paraderos WHERE esFavorito = 1 ORDER BY orden ASC")
+    fun getFavoritos(): Flow<List<Paradero>>
+
     @Query("UPDATE paraderos SET esFavorito = :esFavorito WHERE id = :paraderoId")
     suspend fun updateFavorito(paraderoId: String, esFavorito: Boolean)
 

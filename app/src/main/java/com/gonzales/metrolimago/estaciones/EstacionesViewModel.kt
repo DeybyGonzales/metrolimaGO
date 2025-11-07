@@ -33,6 +33,8 @@ class EstacionesViewModel(application: Application) : AndroidViewModel(applicati
     val corredores: StateFlow<List<Corredor>>
     val items: StateFlow<List<TransportItem>>
 
+    val favoritos: StateFlow<List<TransportItem>>
+
     init {
         val database = MetroDatabase.getDatabase(application)
         repository = EstacionRepository(
@@ -47,6 +49,14 @@ class EstacionesViewModel(application: Application) : AndroidViewModel(applicati
 
         corredores = repository.getAllCorredores()
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+        favoritos = combine(
+            repository.getEstacionesFavoritas(),
+            repository.getParaderosFavoritos()
+        ) { estacionesFav, paraderosFav ->
+            estacionesFav.map { TransportItem.EstacionItem(it) } +
+                    paraderosFav.map { TransportItem.ParaderoItem(it) }
+        }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
         items = combine(
             _searchQuery,
@@ -120,7 +130,7 @@ class EstacionesViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     // ============================================
-    // FUNCIONES PARA EL PLANIFICADOR
+    // FUNCIONES PARA EL PLANIFICADOR DE LÍNEAS
     // ============================================
 
     suspend fun getAllEstacionesList(): List<Estacion> {
@@ -176,10 +186,82 @@ class EstacionesViewModel(application: Application) : AndroidViewModel(applicati
         // TODO: Si son líneas diferentes, implementar transbordo
         return null
     }
+
+    // ============================================
+    // ✅ NUEVAS FUNCIONES PARA PLANIFICADOR DE CORREDORES
+    // ============================================
+
+    suspend fun getAllParaderosList(): List<Paradero> {
+        return repository.getAllParaderos().first()
+    }
+
+    suspend fun calcularRutaCorredor(origenId: String, destinoId: String): RutaCorredorResult? {
+        val todosParaderos = getAllParaderosList()
+
+        val origen = todosParaderos.find { it.id == origenId } ?: return null
+        val destino = todosParaderos.find { it.id == destinoId } ?: return null
+
+        // Si son el mismo paradero
+        if (origen.id == destino.id) {
+            return RutaCorredorResult(
+                origen = origen,
+                destino = destino,
+                paraderos = listOf(origen),
+                tiempoEstimado = 0,
+                numeroParaderos = 1,
+                corredor = origen.corredor,
+                colorCorredor = getColorCorredor(origen.corredor)
+            )
+        }
+
+        // Si están en el mismo corredor
+        if (origen.corredor == destino.corredor) {
+            val paraderosRuta = todosParaderos
+                .filter { it.corredor == origen.corredor }
+                .sortedBy { it.orden }
+
+            val indexOrigen = paraderosRuta.indexOfFirst { it.id == origen.id }
+            val indexDestino = paraderosRuta.indexOfFirst { it.id == destino.id }
+
+            val ruta = if (indexOrigen < indexDestino) {
+                paraderosRuta.subList(indexOrigen, indexDestino + 1)
+            } else {
+                paraderosRuta.subList(indexDestino, indexOrigen + 1).reversed()
+            }
+
+            val numeroParaderos = ruta.size
+            val tiempoEstimado = (numeroParaderos - 1) * 3 + 5 // 3 min entre paraderos + 5 min espera
+
+            return RutaCorredorResult(
+                origen = origen,
+                destino = destino,
+                paraderos = ruta,
+                tiempoEstimado = tiempoEstimado,
+                numeroParaderos = numeroParaderos,
+                corredor = origen.corredor,
+                colorCorredor = getColorCorredor(origen.corredor)
+            )
+        }
+
+        // Si están en corredores diferentes, retornar null (sin transferencia por ahora)
+        return null
+    }
+
+    private fun getColorCorredor(corredor: String): String {
+        return when (corredor.lowercase()) {
+            "azul" -> "#0D47A1"
+            "rojo" -> "#D32F2F"
+            "morado" -> "#7B1FA2"
+            "amarillo" -> "#F57F17"
+            "verde" -> "#388E3C"
+            "naranja" -> "#FF6F00"
+            else -> "#757575"
+        }
+    }
 }
 
 // ============================================
-// DATA CLASS PARA RESULTADO DE RUTA
+// DATA CLASS PARA RESULTADO DE RUTA (LÍNEAS)
 // ============================================
 
 @Parcelize
@@ -193,4 +275,22 @@ data class RutaResult(
     val requiereTransbordo: Boolean = false,
     val tarifaGeneral: Double = 1.50,
     val tarifaUniversitaria: Double = 0.75
+) : Parcelable
+
+// ============================================
+// ✅ NUEVA DATA CLASS PARA RESULTADO DE RUTA (CORREDORES)
+// ============================================
+
+@Parcelize
+data class RutaCorredorResult(
+    val origen: Paradero,
+    val destino: Paradero,
+    val paraderos: List<Paradero>,
+    val tiempoEstimado: Int, // en minutos
+    val numeroParaderos: Int,
+    val corredor: String,
+    val colorCorredor: String,
+    val requiereTransferencia: Boolean = false,
+    val tarifaGeneral: Double = 2.50,
+    val tarifaUniversitaria: Double = 1.25
 ) : Parcelable

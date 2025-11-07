@@ -1,14 +1,23 @@
+<!-- res/values-en/strings.xml (INGLÉS) -->
 <resources>
     <!-- App -->
     <string name="app_name">MetroLimaGO</string>
 
     <!-- Main Screen -->
-    <string name="titulo_principal">Metro Line 1</string>
+    <string name="titulo_principal">MetroLimaGO</string>
     <string name="subtitulo_principal">Explore all stations</string>
     <string name="buscar_estacion">Search station...</string>
     <string name="todas_estaciones">All Stations</string>
     <string name="estaciones_cercanas">Nearby Stations</string>
     <string name="ver_mapa">View Map</string>
+
+    <!-- Home Screen Cards -->
+    <string name="planifica_viaje">Plan your trip</string>
+    <string name="planifica_viaje_desc">Find the best route to your destination</string>
+    <string name="explorar_estaciones">Explore stations</string>
+    <string name="explorar_estaciones_desc">Check information for all stations</string>
+    <string name="servicio_operativo">Service Operational</string>
+    <string name="servicio_operativo_desc">All lines operating normally</string>
 
     <!-- Station Detail -->
     <string name="detalle_estacion">Station Details</string>
@@ -28,7 +37,7 @@
 
     <!-- Settings/Language -->
     <string name="seleccionar_idioma">Select Language</string>
-    <string name="idioma_espanol">Español</string>
+    <string name="idioma_espanol">Spanish</string>
     <string name="idioma_ingles">English</string>
     <string name="idioma_actual">Current language</string>
     <string name="cambiar_idioma">Change language</string>
@@ -38,4 +47,36 @@
     <string name="cargando">Loading...</string>
     <string name="error_cargar">Error loading stations</string>
     <string name="idioma_cambiado">Language changed successfully</string>
+
+    <!-- Planner -->
+    <string name="instruccion_planificador">Select your origin and destination to calculate the best route</string>
+    <string name="origen">Origin</string>
+    <string name="destino">Destination</string>
+    <string name="seleccionar_estacion">Select a station</string>
+    <string name="linea_1">Line 1</string>
+    <string name="linea_2">Line 2</string>
+    <string name="calcular_ruta">Calculate Route</string>
+    <string name="calculando">Calculating...</string>
+    <string name="ruta_calculada">🎉 Route Calculated</string>
+    <string name="tiempo_min">%1$d min</string>
+    <string name="num_estaciones">%1$d stations</string>
+    <string name="tarifa_general">S/ %1$s</string>
+    <string name="tarifa_universitaria">S/ %1$s University</string>
+    <string name="recorrido">Route:</string>
+    <string name="ver_ruta_mapa">View route on map</string>
+    <string name="volver">Back</string>
+
+    <!-- Station List -->
+    <string name="transporte">Transport</string>
+    <string name="buscar">Search...</string>
+    <string name="limpiar">Clear</string>
+    <string name="todas">All</string>
+    <string name="no_resultados">No results found</string>
+    <string name="favorito">Favorite</string>
+
+    <!-- Favorites -->
+    <string name="sin_favoritos">You have no favorites</string>
+    <string name="sin_favoritos_desc">Tap the ❤️ icon on any station or stop to add it to your favorites</string>
+    <string name="total_favoritos">%1$d saved favorites</string>
+    <string name="toca_corazon_quitar">Tap the heart again to remove from favorites</string>
 </resources>
