@@ -16,6 +16,9 @@ class EstacionRepository(
     private val corredorDao: CorredorDao,
     private val paraderoDao: ParaderoDao
 ) {
+    // ============================================
+    // ESTACIONES
+    // ============================================
     fun getAllEstaciones(): Flow<List<Estacion>> = estacionDao.getAllEstaciones()
 
     fun getEstacionesByLinea(lineaId: String): Flow<List<Estacion>> =
@@ -27,20 +30,16 @@ class EstacionRepository(
     fun searchEstaciones(query: String): Flow<List<Estacion>> =
         estacionDao.searchEstaciones(query)
 
-    fun getFavoritas(): Flow<List<Estacion>> = estacionDao.getFavoritas()
+    // ✅ OBTENER ESTACIONES FAVORITAS
+    fun getEstacionesFavoritas(): Flow<List<Estacion>> = estacionDao.getFavoritas()
 
     suspend fun toggleFavorita(estacionId: String, esFavorita: Boolean) {
         estacionDao.updateFavorita(estacionId, esFavorita)
     }
 
-    fun getAllLineas(): Flow<List<Linea>> = lineaDao.getAllLineas()
-
-    suspend fun getLineaById(lineaId: String): Linea? = lineaDao.getLineaById(lineaId)
-
-    fun getAllCorredores(): Flow<List<Corredor>> = corredorDao.getAllCorredores()
-
-    suspend fun getCorredorById(corredorId: String): Corredor? = corredorDao.getCorredorById(corredorId)
-
+    // ============================================
+    // PARADEROS
+    // ============================================
     fun getAllParaderos(): Flow<List<Paradero>> = paraderoDao.getAllParaderos()
 
     fun getParaderosByCorredor(corredorId: String): Flow<List<Paradero>> =
@@ -52,7 +51,25 @@ class EstacionRepository(
     fun searchParaderos(query: String): Flow<List<Paradero>> =
         paraderoDao.searchParaderos(query)
 
+    // ✅ OBTENER PARADEROS FAVORITOS
+    fun getParaderosFavoritos(): Flow<List<Paradero>> = paraderoDao.getFavoritos()
+
     suspend fun toggleFavoritoParadero(paraderoId: String, esFavorito: Boolean) {
         paraderoDao.updateFavorito(paraderoId, esFavorito)
     }
+
+    // ============================================
+    // LÍNEAS
+    // ============================================
+    fun getAllLineas(): Flow<List<Linea>> = lineaDao.getAllLineas()
+
+    suspend fun getLineaById(lineaId: String): Linea? = lineaDao.getLineaById(lineaId)
+
+    // ============================================
+    // CORREDORES
+    // ============================================
+    fun getAllCorredores(): Flow<List<Corredor>> = corredorDao.getAllCorredores()
+
+    suspend fun getCorredorById(corredorId: String): Corredor? =
+        corredorDao.getCorredorById(corredorId)
 }

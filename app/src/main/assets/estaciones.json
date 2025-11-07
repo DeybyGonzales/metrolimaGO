@@ -612,20 +612,6 @@
       "color": "#F44336",
       "ruta": "San Martín de Porres – Ate",
       "estado": "operativo"
-    },
-    {
-      "id": "verde",
-      "nombre": "Corredor Verde",
-      "color": "#4CAF50",
-      "ruta": "San Miguel – Surco – La Molina",
-      "estado": "operativo"
-    },
-    {
-      "id": "amarillo",
-      "nombre": "Corredor Amarillo",
-      "color": "#FF9800",
-      "ruta": "Callao – San Martín de Porres – Ate",
-      "estado": "operativo"
     }
   ],
   "paraderos": [
@@ -634,9 +620,9 @@
       "nombre": "28 de Julio",
       "corredor": "azul",
       "orden": 1,
-      "zona": "La Victoria",
-      "latitud": -12.0650,
-      "longitud": -77.0300,
+      "zona": "Miraflores",
+      "latitud": -12.1150,
+      "longitud": -77.0320,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -646,8 +632,8 @@
       "corredor": "azul",
       "orden": 2,
       "zona": "Miraflores",
-      "latitud": -12.0981,
-      "longitud": -77.0350,
+      "latitud": -12.1050,
+      "longitud": -77.0310,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -656,9 +642,9 @@
       "nombre": "Domingo Orué",
       "corredor": "azul",
       "orden": 3,
-      "zona": "Miraflores",
-      "latitud": -12.1100,
-      "longitud": -77.0380,
+      "zona": "Surquillo",
+      "latitud": -12.0950,
+      "longitud": -77.0300,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -669,7 +655,7 @@
       "orden": 4,
       "zona": "San Isidro",
       "latitud": -12.0900,
-      "longitud": -77.0320,
+      "longitud": -77.0290,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -679,7 +665,7 @@
       "corredor": "azul",
       "orden": 5,
       "zona": "Lince",
-      "latitud": -12.0750,
+      "latitud": -12.0800,
       "longitud": -77.0280,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
@@ -690,8 +676,8 @@
       "corredor": "azul",
       "orden": 6,
       "zona": "Lince",
-      "latitud": -12.0700,
-      "longitud": -77.0250,
+      "latitud": -12.0720,
+      "longitud": -77.0270,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -701,8 +687,8 @@
       "corredor": "azul",
       "orden": 7,
       "zona": "Lima",
-      "latitud": -12.0600,
-      "longitud": -77.0200,
+      "latitud": -12.0650,
+      "longitud": -77.0260,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -712,8 +698,8 @@
       "corredor": "azul",
       "orden": 8,
       "zona": "Lima",
-      "latitud": -12.0550,
-      "longitud": -77.0180,
+      "latitud": -12.0580,
+      "longitud": -77.0250,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -723,8 +709,8 @@
       "corredor": "azul",
       "orden": 9,
       "zona": "Lima",
-      "latitud": -12.0500,
-      "longitud": -77.0150,
+      "latitud": -12.0510,
+      "longitud": -77.0240,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -735,7 +721,7 @@
       "orden": 10,
       "zona": "Rímac",
       "latitud": -12.0450,
-      "longitud": -77.0450,
+      "longitud": -77.0400,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -822,8 +808,8 @@
       "corredor": "rojo",
       "orden": 8,
       "zona": "San Borja",
-      "latitud": -12.0950,
-      "longitud": -77.0100,
+      "latitud": -12.0920,
+      "longitud": -77.0050,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
     },
@@ -833,153 +819,10 @@
       "corredor": "rojo",
       "orden": 9,
       "zona": "Ate",
-      "latitud": -12.0400,
-      "longitud": -76.9800,
+      "latitud": -12.0350,
+      "longitud": -76.9550,
       "horarioApertura": "05:00",
       "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_01",
-      "nombre": "Plaza San Miguel",
-      "corredor": "verde",
-      "orden": 1,
-      "zona": "San Miguel",
-      "latitud": -12.0780,
-      "longitud": -77.0900,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_02",
-      "nombre": "Salaverry",
-      "corredor": "verde",
-      "orden": 2,
-      "zona": "Jesús María",
-      "latitud": -12.0800,
-      "longitud": -77.0650,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_03",
-      "nombre": "Parque de la Reserva",
-      "corredor": "verde",
-      "orden": 3,
-      "zona": "Lima",
-      "latitud": -12.0700,
-      "longitud": -77.0400,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_04",
-      "nombre": "Angamos",
-      "corredor": "verde",
-      "orden": 4,
-      "zona": "Surquillo",
-      "latitud": -12.0981,
-      "longitud": -77.0350,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_05",
-      "nombre": "Primavera",
-      "corredor": "verde",
-      "orden": 5,
-      "zona": "Surco",
-      "latitud": -12.1100,
-      "longitud": -77.0150,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_06",
-      "nombre": "La Encalada",
-      "corredor": "verde",
-      "orden": 6,
-      "zona": "Surco",
-      "latitud": -12.1250,
-      "longitud": -76.9950,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "verde_07",
-      "nombre": "Molina Plaza",
-      "corredor": "verde",
-      "orden": 7,
-      "zona": "La Molina",
-      "latitud": -12.0800,
-      "longitud": -76.9400,
-      "horarioApertura": "05:00",
-      "horarioCierre": "22:30"
-    },
-    {
-      "id": "amarillo_01",
-      "nombre": "Aeropuerto Jorge Chávez",
-      "corredor": "amarillo",
-      "orden": 1,
-      "zona": "Callao",
-      "latitud": -12.0219,
-      "longitud": -77.1143,
-      "horarioApertura": "04:30",
-      "horarioCierre": "23:00"
-    },
-    {
-      "id": "amarillo_02",
-      "nombre": "Faucett",
-      "corredor": "amarillo",
-      "orden": 2,
-      "zona": "Callao",
-      "latitud": -12.0583,
-      "longitud": -77.1100,
-      "horarioApertura": "04:30",
-      "horarioCierre": "23:00"
-    },
-    {
-      "id": "amarillo_03",
-      "nombre": "Caquetá",
-      "corredor": "amarillo",
-      "orden": 3,
-      "zona": "Rímac",
-      "latitud": -12.0400,
-      "longitud": -77.0500,
-      "horarioApertura": "04:30",
-      "horarioCierre": "23:00"
-    },
-    {
-      "id": "amarillo_04",
-      "nombre": "Acho",
-      "corredor": "amarillo",
-      "orden": 4,
-      "zona": "Rímac",
-      "latitud": -12.0450,
-      "longitud": -77.0450,
-      "horarioApertura": "04:30",
-      "horarioCierre": "23:00"
-    },
-    {
-      "id": "amarillo_05",
-      "nombre": "Santa Anita",
-      "corredor": "amarillo",
-      "orden": 5,
-      "zona": "Santa Anita",
-      "latitud": -12.0361,
-      "longitud": -76.9711,
-      "horarioApertura": "04:30",
-      "horarioCierre": "23:00"
-    },
-    {
-      "id": "amarillo_06",
-      "nombre": "Ate",
-      "corredor": "amarillo",
-      "orden": 6,
-      "zona": "Ate",
-      "latitud": -12.0400,
-      "longitud": -76.9800,
-      "horarioApertura": "04:30",
-      "horarioCierre": "23:00"
     }
   ]
 }

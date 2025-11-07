@@ -11,9 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.gonzales.metrolimago.data.local.entities.Estacion
 import com.gonzales.metrolimago.estaciones.RutaResult
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -21,6 +21,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,15 +69,12 @@ fun MapaRutaScreen(
                         }
                         if (allPoints.isNotEmpty()) {
                             val bounds = org.osmdroid.util.BoundingBox.fromGeoPoints(allPoints)
-
-                            // Expandir bounds con padding
                             val expandedBounds = org.osmdroid.util.BoundingBox(
                                 bounds.latNorth + 0.02,
                                 bounds.lonEast + 0.02,
                                 bounds.latSouth - 0.02,
                                 bounds.lonWest - 0.02
                             )
-
                             map.zoomToBoundingBox(expandedBounds, true)
                         }
                     }
@@ -94,7 +93,7 @@ fun MapaRutaScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Mapa
+            // 🗺️ Mapa principal
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
                 factory = { ctx ->
@@ -102,7 +101,7 @@ fun MapaRutaScreen(
                 }
             )
 
-            // Card de información
+            // 📋 Card inferior de información
             Card(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -122,19 +121,19 @@ fun MapaRutaScreen(
                             Text(
                                 text = "🟢 ${ruta.origen.nombre}",
                                 style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                                fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "🔴 ${ruta.destino.nombre}",
                                 style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                                fontWeight = FontWeight.Bold
                             )
                         }
                         Column(horizontalAlignment = Alignment.End) {
                             Text(
                                 text = "${ruta.tiempoEstimado} min",
                                 style = MaterialTheme.typography.titleLarge,
-                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
                             Text(
@@ -154,11 +153,19 @@ fun MapaRutaScreen(
         }
     }
 }
+
 private fun createMapViewWithRoute(context: Context, ruta: RutaResult): MapView {
     return MapView(context).apply {
         setTileSource(TileSourceFactory.MAPNIK)
         setMultiTouchControls(true)
-        minZoomLevel = 10.0  // ← Cambiar de 12 a 10 (más zoom out)
+
+        // 🔹 Activar ubicación del usuario (punto azul)
+        val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), this)
+        locationOverlay.enableMyLocation()
+        locationOverlay.enableFollowLocation()
+        overlays.add(locationOverlay)
+
+        minZoomLevel = 10.0
         maxZoomLevel = 19.0
 
         val puntos = ruta.estaciones.map {
@@ -176,31 +183,26 @@ private fun createMapViewWithRoute(context: Context, ruta: RutaResult): MapView 
             val marker = Marker(this).apply {
                 position = GeoPoint(estacion.latitud, estacion.longitud)
                 title = estacion.nombre
-
                 snippet = when {
                     index == 0 -> "🟢 Origen - ${estacion.distrito}"
                     index == ruta.estaciones.size - 1 -> "🔴 Destino - ${estacion.distrito}"
                     else -> "Estación ${index + 1} - ${estacion.distrito}"
                 }
-
                 setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             }
             overlays.add(marker)
         }
 
-        // MEJORADO: Ajustar zoom con más padding y delay
+        // Ajustar zoom con padding
         postDelayed({
             val bounds = org.osmdroid.util.BoundingBox.fromGeoPoints(puntos)
-
-            // Expandir el bounding box para más padding
             val expandedBounds = org.osmdroid.util.BoundingBox(
-                bounds.latNorth + 0.02,  // Agregar padding arriba
-                bounds.lonEast + 0.02,   // Agregar padding derecha
-                bounds.latSouth - 0.02,  // Agregar padding abajo
-                bounds.lonWest - 0.02    // Agregar padding izquierda
+                bounds.latNorth + 0.02,
+                bounds.lonEast + 0.02,
+                bounds.latSouth - 0.02,
+                bounds.lonWest - 0.02
             )
-
             zoomToBoundingBox(expandedBounds, true)
-        }, 300) // Delay de 300ms para que el mapa esté listo
+        }, 300)
     }
 }

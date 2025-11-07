@@ -1,39 +1,83 @@
+<!-- res/values/strings.xml (ESPAÑOL) -->
 <resources>
+    <!-- App -->
     <string name="app_name">MetroLimaGO</string>
 
-<string name="titulo_principal">Línea 1 del Metro</string>
-<string name="subtitulo_principal">Conoce todas las estaciones</string>
-<string name="buscar_estacion">Buscar estación...</string>
-<string name="todas_estaciones">Todas las estaciones</string>
-<string name="estaciones_cercanas">Estaciones Cercanas</string>
-<string name="ver_mapa">Ver Mapa</string>
+    <!-- Main Screen -->
+    <string name="titulo_principal">MetroLimaGO</string>
+    <string name="subtitulo_principal">Explora todas las estaciones</string>
+    <string name="buscar_estacion">Buscar estación...</string>
+    <string name="todas_estaciones">Todas las Estaciones</string>
+    <string name="estaciones_cercanas">Estaciones Cercanas</string>
+    <string name="ver_mapa">Ver Mapa</string>
 
-    <!-- Detalle de Estación -->
-<string name="detalle_estacion">Detalle de Estación</string>
-<string name="distrito">Distrito</string>
-<string name="horario">Horario</string>
-<string name="linea">Línea</string>
-<string name="orden">Orden</string>
-<string name="estacion_numero">Estación #%1$d</string>
-<string name="linea_numero">Línea %1$d</string>
+    <!-- Home Screen Cards -->
+    <string name="planifica_viaje">Planifica tu viaje</string>
+    <string name="planifica_viaje_desc">Encuentra la mejor ruta a tu destino</string>
+    <string name="explorar_estaciones">Explorar estaciones</string>
+    <string name="explorar_estaciones_desc">Consulta la información de todas las estaciones</string>
+    <string name="mis_favoritos_desc">Accede rápidamente a tus estaciones guardadas</string>
+    <string name="servicio_operativo">Servicio Operativo</string>
+    <string name="servicio_operativo_desc">Todas las líneas operan con normalidad</string>
 
-    <!-- Navegación -->
-<string name="inicio">Inicio</string>
-<string name="estaciones">Estaciones</string>
-<string name="mapa">Mapa</string>
-<string name="favoritos">Favoritos</string>
-<string name="configuracion">Configuración</string>
+    <!-- Station Detail -->
+    <string name="detalle_estacion">Detalles de la estación</string>
+    <string name="distrito">Distrito</string>
+    <string name="horario">Horario</string>
+    <string name="linea">Línea</string>
+    <string name="orden">Orden</string>
+    <string name="estacion_numero">Estación #%1$d</string>
+    <string name="linea_numero">Línea %1$d</string>
 
-    <!-- Configuración/Idioma -->
-<string name="seleccionar_idioma">Seleccionar Idioma</string>
-<string name="idioma_espanol">Español</string>
-<string name="idioma_ingles">English</string>
-<string name="idioma_actual">Idioma actual</string>
-<string name="cambiar_idioma">Cambiar idioma</string>
+    <!-- Navigation -->
+    <string name="inicio">Inicio</string>
+    <string name="estaciones">Estaciones</string>
+    <string name="mapa">Mapa</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="configuracion">Configuración</string>
 
-    <!-- Mensajes -->
-<string name="sin_estaciones">No se encontraron estaciones</string>
-<string name="cargando">Cargando...</string>
-<string name="error_cargar">Error al cargar estaciones</string>
-<string name="idioma_cambiado">Idioma cambiado correctamente</string>
-    </resources>
+    <!-- Settings/Language -->
+    <string name="seleccionar_idioma">Seleccionar idioma</string>
+    <string name="idioma_espanol">Español</string>
+    <string name="idioma_ingles">Inglés</string>
+    <string name="idioma_actual">Idioma actual</string>
+    <string name="cambiar_idioma">Cambiar idioma</string>
+
+    <!-- Messages -->
+    <string name="sin_estaciones">No se encontraron estaciones</string>
+    <string name="cargando">Cargando...</string>
+    <string name="error_cargar">Error al cargar las estaciones</string>
+    <string name="idioma_cambiado">Idioma cambiado correctamente</string>
+
+    <!-- Planificador -->
+    <string name="instruccion_planificador">Selecciona tu origen y destino para calcular la mejor ruta</string>
+    <string name="origen">Origen</string>
+    <string name="destino">Destino</string>
+    <string name="seleccionar_estacion">Selecciona una estación</string>
+    <string name="linea_1">Línea 1</string>
+    <string name="linea_2">Línea 2</string>
+    <string name="calcular_ruta">Calcular Ruta</string>
+    <string name="calculando">Calculando...</string>
+    <string name="ruta_calculada">🎉 Ruta Calculada</string>
+    <string name="tiempo_min">%1$d min</string>
+    <string name="num_estaciones">%1$d estaciones</string>
+    <string name="tarifa_general">S/ %1$s</string>
+    <string name="tarifa_universitaria">S/ %1$s Universitaria</string>
+    <string name="recorrido">Recorrido:</string>
+    <string name="ver_ruta_mapa">Ver ruta en mapa</string>
+    <string name="volver">Volver</string>
+
+    <!-- Lista Estaciones -->
+    <string name="transporte">Transporte</string>
+    <string name="buscar">Buscar...</string>
+    <string name="limpiar">Limpiar</string>
+    <string name="todas">Todas</string>
+    <string name="no_resultados">No se encontraron resultados</string>
+    <string name="favorito">Favorito</string>
+
+    <!-- Favoritos -->
+    <string name="sin_favoritos">No tienes favoritos</string>
+    <string name="sin_favoritos_desc">Toca el ícono ❤️ en cualquier estación o paradero para agregarlo a tus favoritos</string>
+    <string name="total_favoritos">%1$d favoritos guardados</string>
+    <string name="toca_corazon_quitar">Toca el corazón nuevamente para quitar de favoritos</string>
+</resources>
