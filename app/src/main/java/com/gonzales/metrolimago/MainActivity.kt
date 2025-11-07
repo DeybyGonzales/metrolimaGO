@@ -15,10 +15,11 @@ import com.gonzales.metrolimago.util.LanguageManager
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Pedir permiso de ubicación si no está concedido
+        // ✅ Pedir permisos de ubicación
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -31,11 +32,11 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        // Aplicar idioma guardado al iniciar la app
+        // 🔧 Aplicar idioma guardado
         val savedLanguage = LanguageManager.getLanguage(this)
         LanguageManager.applyLanguage(this, savedLanguage)
 
-        // Cargar datos iniciales
+        // 🔹 Cargar datos iniciales
         lifecycleScope.launch {
             val database = MetroDatabase.getDatabase(applicationContext)
             val dataLoader = DataLoader(applicationContext, database)
