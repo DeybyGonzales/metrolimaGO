@@ -1,5 +1,6 @@
 package com.gonzales.metrolimago.estaciones
 
+// ⚠️ Asegúrate de que todos estos imports están (ya los tenías)
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -145,6 +146,7 @@ fun ListaEstacionesScreen(
                                 )
                             }
                             is TransportItem.ParaderoItem -> {
+                                // Aquí se llama a la función corregida
                                 ParaderoCard(
                                     paradero = item.paradero,
                                     onClick = { onParaderoClick(item.paradero.id) },
@@ -211,8 +213,8 @@ fun EstacionCard(
                 painter = painterResource(id = estacion.imagenPrincipalResId),
                 contentDescription = estacion.nombre,
                 modifier = Modifier
-                    .size(60.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .size(60.dp) // Tamaño rectangular
+                    .clip(RoundedCornerShape(8.dp)), // Con bordes redondeados
                 contentScale = ContentScale.Crop
             )
 
@@ -263,6 +265,9 @@ fun EstacionCard(
     }
 }
 
+// -----------------------------------------------------------------
+//  ✅ ¡AQUÍ ESTÁ LA FUNCIÓN CORREGIDA! ✅
+// -----------------------------------------------------------------
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParaderoCard(
@@ -282,18 +287,34 @@ fun ParaderoCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.tertiaryContainer,
-                modifier = Modifier.size(48.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.DirectionsBus,
-                    contentDescription = null,
-                    modifier = Modifier.padding(12.dp),
-                    tint = MaterialTheme.colorScheme.tertiary
-                )
-            }
+            // ✅ CAMBIO:
+            // Reemplazamos el Surface con Icon por un Image,
+            // usando la 'imagenPrincipalResId' del paradero
+            Image(
+                painter = painterResource(id = paradero.imagenPrincipalResId),
+                contentDescription = paradero.nombre,
+                modifier = Modifier
+                    .size(60.dp) // Mismo tamaño que EstacionCard
+                    .clip(RoundedCornerShape(8.dp)), // Misma forma
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // ✅ NUEVO:
+            // Añadimos una barra de color para el corredor
+            Box(
+                modifier = Modifier
+                    .size(8.dp, 48.dp)
+                    .background(
+                        color = when(paradero.corredor) { // Usa el color del corredor
+                            "azul" -> Color(0xFF2196F3)
+                            "rojo" -> Color(0xFFF44336)
+                            else -> Color.Gray
+                        },
+                        RoundedCornerShape(4.dp)
+                    )
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -313,7 +334,7 @@ fun ParaderoCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        paradero.zona,
+                        paradero.zona, // Mostramos la 'zona'
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
